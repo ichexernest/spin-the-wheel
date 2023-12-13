@@ -4,14 +4,14 @@ import App from './App.jsx'
 import './index.css'
 import { CookiesProvider } from 'react-cookie';
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from "react-router-dom";
 import './index.css'
 import Home from './pages/Home';
 import WheelPage from './pages/WheelPage';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Home />,
