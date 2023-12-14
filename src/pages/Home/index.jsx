@@ -3,6 +3,7 @@ import { Container, Snowflake } from './Home.styles';
 import { Link } from "react-router-dom";
 import SharedModal from '../../components/Modal';
 import logo from '../../assets/logo.png';
+import { useCookies } from 'react-cookie';
 
 const Home = () => {
     const snowflakes = 60; // 雪花的數量
@@ -10,24 +11,27 @@ const Home = () => {
     const [modalAwardOpen, setModalAwardOpen] = useState(false);
     const [gainedAward, setGainedAward] = useState([]);
     const [isCopied, setIsCopied] = useState(false);
+    let pInfoA;
 
-    const [cookies, setCookies] = useState("yetPlaying");
+   //const [cookies, setCookies] = useState("yetPlaying");
+    const [cookies, setCookie] = useCookies(['pInfo']);
   
     const checkAuth = () => {
-      return cookies == "played" ? false : true;
+    if(cookies.pInfo) pInfoA=cookies.pInfo.split(',');
+      return cookies.pInfo ? false : true;
     //return cookies == "played" ? true : false;
 
     }
     
     const cpoyCode = ()=>{
         navigator.clipboard.writeText(awardCode).then(() => {
-          setIsCopied(true)
-          console.log('Text copied to clipboard');
+            setIsCopied(true)
+            console.log('Text copied to clipboard');
         }).catch(err => {
-          console.error('Failed to copy text: ', err);
+            console.error('Failed to copy text: ', err);
         });
-  
-      }
+
+        }
 
 
     const toggleModal = (event) => {
@@ -94,12 +98,12 @@ const Home = () => {
                 {modalAwardOpen && (
             <SharedModal id={"bb"} title={"恭喜抽中"} >
             <div className=' flex flex-col'>
-            <span className='text-3xl my-5 font-bold text-slate-800'>{gainedAward[0]}</span>
+            <span className='text-3xl my-5 font-bold text-slate-800'>{pInfoA[0]}</span>
             <span className='pt-5 text-md text-slate-800'>
-              折扣券號碼：{gainedAward[1]}<br/>
+              折扣券號碼：{pInfoA[1]}<br/>
             </span>
             <span className='p-5 text-sm text-slate-800'>{
-              gainedAward[1]=="bpmcmgmbp2023"?
+              pInfoA[1]=="bpmcmgmbp2023"?
               "請記得將中獎號碼截圖或是複製到聊天室中，我們會為您處理後續寄送作業唷！":
               "折扣券可在官方商城購物車中輸入，請記得複製或抄下您的折扣券號碼喔！"
             }

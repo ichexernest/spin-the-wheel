@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, SpinBtn, WheelArea, Number } from './Wheel.styles';
-
+import { useCookies } from 'react-cookie';
 
 const Wheel = ({setAward, setAwardCode,setAddModalOpen}) => {
     const [val, setVal] = useState(0);
@@ -9,6 +9,7 @@ const Wheel = ({setAward, setAwardCode,setAddModalOpen}) => {
     const prizes = ['聖誕限定禮盒', '折扣券50元', '折扣券100元', '折扣券50元', '折扣券500元', '折扣券50元', '折扣券100元', '折扣券50元'];
     const prizesCode = ['bpmcmgmbp2023', 'mcgmcps012023', 'mcgmcpb012023', 'mcgmcps012023', 'mcgmcpg012023', 'mcgmcps012023', 'mcgmcpb012023', 'mcgmcps012023'];
     const weights = [3, 15, 16, 15, 5, 15, 16, 15]; // 總和為100
+    const [cookies, setCookie] = useCookies(['pInfo']);
 
     const weightedRandom=(weights) =>{
         const totalWeight = weights.reverse().reduce((acc, cur) => acc + cur, 0);
@@ -41,6 +42,7 @@ const Wheel = ({setAward, setAwardCode,setAddModalOpen}) => {
                 setAddModalOpen(true);
                 setIsSpinning(false); // 旋轉結束後解鎖按鈕
                 setVal(0); // 重置轉盤
+                setCookie('pInfo', `${prizes[resultIndex]},${prizesCode[resultIndex]}`);
             }, 6000);
 
             return () => clearTimeout(timer);
